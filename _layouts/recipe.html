@@ -2,30 +2,24 @@
 layout: default
 ---
 
-<article>
-  <nav class="mb-8"><a class="text-blue-700 underline hover:text-blue-900" href="{{ '/' | relative_url }}">← All recipes</a></nav>
+<article class="recipe">
+  <nav class="back"><a href="{{ '/' | relative_url }}">← All recipes</a></nav>
 
-  <header class="mb-8">
-    <h1 class="mb-3 break-words text-3xl font-bold tracking-tight sm:text-4xl">{{ page.title }}</h1>
-    {% if page.description %}<p class="break-words text-lg text-neutral-700">{{ page.description }}</p>{% endif %}
-    {% if page.tags %}
-      <ul class="mt-4 flex flex-wrap gap-x-1 text-sm text-neutral-600">
-        {% for tag in page.tags %}<li class="after:content-[','] last:after:content-none">{{ tag }}</li>{% endfor %}
-      </ul>
-    {% endif %}
+  <h1>{{ page.title }}</h1>
+  {% if page.description %}<p class="subtitle">{{ page.description }}</p>{% endif %}
+  {% if page.tags %}<p class="tags">{{ page.tags | join: ', ' }}</p>{% endif %}
 
-    {% if page.languages.size > 1 %}
-      <div class="mt-6 flex gap-2" aria-label="Language">
-        {% for language in page.languages %}
-          <button class="rounded-md border border-neutral-300 bg-white px-3 py-2 text-base text-neutral-950 hover:bg-neutral-50 disabled:bg-neutral-100 disabled:text-neutral-500" type="button" data-language-button="{{ language.code }}">{{ language.label }}</button>
-        {% endfor %}
-      </div>
-    {% endif %}
-  </header>
+  {% if page.languages.size > 1 %}
+    <div class="language-toggle" aria-label="Language">
+      {% for language in page.languages %}
+        <button type="button" data-language-button="{{ language.code }}">{{ language.label }}</button>
+      {% endfor %}
+    </div>
+  {% endif %}
 
-  <div class="prose prose-neutral max-w-none break-words prose-a:text-blue-700 prose-h2:border-t prose-h2:border-neutral-200 prose-h2:pt-6 prose-li:my-1">
+  <section class="recipe-content">
     {{ content }}
-  </div>
+  </section>
 </article>
 
 {% if page.languages.size > 1 %}

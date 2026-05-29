@@ -1,17 +1,18 @@
 <!doctype html>
-<html lang="en" class="bg-white text-neutral-950 [color-scheme:light]">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
+  <link rel="stylesheet" href="https://edwardtufte.github.io/tufte-css/tufte.css" type="text/css">
   <link rel="stylesheet" href="{{ '/assets/styles.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 </head>
-<body class="min-h-screen overflow-x-hidden bg-white text-neutral-950 antialiased">
-  <header class="border-b border-neutral-200">
-    <a class="mx-auto block w-full max-w-3xl px-4 py-4 font-semibold text-neutral-950 no-underline" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+<body>
+  <header class="site-header">
+    <a href="{{ '/' | relative_url }}">{{ site.title }}</a>
   </header>
-  <main class="mx-auto w-full max-w-3xl px-4 py-8 sm:py-10">
+  <main>
     {{ content }}
   </main>
 </body>

@@ -23,9 +23,6 @@ The index page lists all recipes and provides search/tag filtering.
 
 ## CSS
 
-Styles use Tailwind CSS. After changing templates or classes, run:
+The site uses the CSSBed Tufte theme: https://www.cssbed.com/tufte/
 
-```sh
-npm install
-npm run build:css
-```
+Local CSS in `assets/styles.css` only handles layout details for the recipe index, filters, and language toggle.

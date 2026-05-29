@@ -1,6 +1,0 @@
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
-
-@source "../_layouts/**/*.html";
-@source "../_recipes/**/*.md";
-@source "../index.html";
