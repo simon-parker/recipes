@@ -30,12 +30,12 @@ body {
   width: 55%;
 }
 
-.filters label {
+.filter-field > label {
+  display: block;
   font-size: 1.1rem;
 }
 
 .filters input,
-.filters select,
 .filters button,
 .language-toggle button {
   border: 1px solid #aaa;
@@ -47,8 +47,7 @@ body {
   padding: 0.35rem 0.5rem;
 }
 
-.filters input,
-.filters select {
+.filters input {
   width: 100%;
 }
 

@@ -55,6 +55,7 @@ title: Recipes
 
 <script>
   const search = document.querySelector('#search');
+  const tagFilter = document.querySelector('#tag-filter');
   const tagToggle = document.querySelector('#tag-toggle');
   const tagSummary = document.querySelector('#tag-summary');
   const tagMenu = document.querySelector('#tag-menu');
@@ -154,7 +155,7 @@ title: Recipes
   tagOptions.forEach((option) => option.addEventListener('change', filterRecipes));
   resetFilters.addEventListener('click', resetAllFilters);
   document.addEventListener('click', (event) => {
-    if (!document.querySelector('#tag-filter').contains(event.target)) setTagMenuOpen(false);
+    if (!tagFilter.contains(event.target)) setTagMenuOpen(false);
   });
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') setTagMenuOpen(false);
