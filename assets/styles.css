@@ -76,24 +76,40 @@ body {
 
 .recipe-card {
   border-top: 1px solid #ccc;
-  padding: 1.25rem 0;
+  padding: 0.55rem 0;
   width: 55%;
 }
 
 .recipe-card h2 {
-  margin: 0 0 0.4rem;
+  display: inline;
+  margin: 0;
   font-style: normal;
-  font-size: 1.8rem;
+  font-size: 1.25rem;
+  line-height: 1.4rem;
 }
 
 .recipe-card p {
-  margin: 0.35rem 0;
+  display: inline;
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.4rem;
+}
+
+.recipe-card h2::after {
+  content: " — ";
+  font-weight: normal;
+  text-decoration: none;
+}
+
+.recipe-card .tags {
+  display: block;
+  margin-top: 0.15rem;
 }
 
 .tags {
   color: #555;
-  font-size: 1.1rem;
-  line-height: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.25rem;
 }
 
 .language-toggle {
@@ -155,7 +171,7 @@ body {
   }
 
   .recipe-card h2 {
-    font-size: 1.6rem;
+    font-size: 1.25rem;
   }
 
   .recipe-content > p,
