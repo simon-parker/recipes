@@ -12,7 +12,7 @@ title: Recipes
     <input id="search" type="search" placeholder="Search recipes, ingredients, tags" autocomplete="off">
 
     <label for="tag-filter">Tags</label>
-    <select id="tag-filter" multiple size="6">
+    <select id="tag-filter" multiple size="4">
       {% assign all_tags = "" | split: "" %}
       {% for recipe in site.recipes %}
         {% assign all_tags = all_tags | concat: recipe.tags %}

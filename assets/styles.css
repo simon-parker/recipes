@@ -23,6 +23,7 @@ body {
 
 .filters {
   display: grid;
+  align-items: start;
   gap: 0.5rem 1rem;
   grid-template-columns: minmax(12rem, 1fr) minmax(12rem, 1fr);
   margin: 2rem 0 2.5rem;
@@ -48,6 +49,10 @@ body {
 .filters input,
 .filters select {
   width: 100%;
+}
+
+.filters input {
+  height: 2.2rem;
 }
 
 .filters label[for="search"] {
