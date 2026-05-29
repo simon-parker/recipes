@@ -36,6 +36,7 @@ body {
 
 .filters input,
 .filters select,
+.filters button,
 .language-toggle button {
   border: 1px solid #aaa;
   border-radius: 0.2rem;
@@ -51,29 +52,66 @@ body {
   width: 100%;
 }
 
-.filters input {
+.filters input,
+.tag-toggle,
+.reset-filters {
   height: 2.2rem;
 }
 
-.filters label[for="search"] {
-  grid-column: 1;
-  grid-row: 1;
+.filter-field {
+  min-width: 0;
 }
 
-.filters #search {
-  grid-column: 1;
-  grid-row: 2;
+.tag-filter {
+  position: relative;
 }
 
-.filters label[for="tag-filter"] {
-  grid-column: 2;
-  grid-row: 1;
+.tag-toggle {
+  width: 100%;
+  text-align: left;
 }
 
-.filters #tag-filter {
-  grid-column: 2;
-  grid-row: 2;
+.tag-menu {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  max-height: 14rem;
+  overflow: auto;
+  border: 1px solid #aaa;
+  background: #fffff8;
+  padding: 0.4rem;
 }
+
+.tag-option {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.tag-option input {
+  width: auto;
+  height: auto;
+  margin-right: 0.35rem;
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.4rem;
+}
+
+.tag-pill {
+  border-radius: 999px;
+  font-size: 0.9rem;
+  line-height: 1rem;
+  padding: 0.2rem 0.55rem;
+}
+
+.reset-filters {
+  align-self: end;
+}
+
 
 .recipe-list {
   padding-top: 0;
@@ -160,14 +198,6 @@ body {
   .filters {
     grid-template-columns: 1fr;
     width: 100%;
-  }
-
-  .filters label[for="search"],
-  .filters #search,
-  .filters label[for="tag-filter"],
-  .filters #tag-filter {
-    grid-column: 1;
-    grid-row: auto;
   }
 
   .recipe-card,

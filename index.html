@@ -8,20 +8,33 @@ title: Recipes
   <p class="subtitle">{{ site.recipes | size }} recipe{% if site.recipes.size != 1 %}s{% endif %}</p>
 
   <section class="filters" aria-label="Recipe filters">
-    <label for="search">Search</label>
-    <input id="search" type="search" placeholder="Search recipes, ingredients, tags" autocomplete="off">
+    <div class="filter-field">
+      <label for="search">Search</label>
+      <input id="search" type="search" placeholder="Search recipes, ingredients, tags" autocomplete="off">
+    </div>
 
-    <label for="tag-filter">Tags</label>
-    <select id="tag-filter" multiple size="4">
-      {% assign all_tags = "" | split: "" %}
-      {% for recipe in site.recipes %}
-        {% assign all_tags = all_tags | concat: recipe.tags %}
-      {% endfor %}
-      {% assign tags = all_tags | uniq | sort %}
-      {% for tag in tags %}
-        <option value="{{ tag | downcase | escape }}">{{ tag }}</option>
-      {% endfor %}
-    </select>
+    <div class="filter-field tag-filter" id="tag-filter">
+      <label id="tag-filter-label">Tags</label>
+      <button id="tag-toggle" class="tag-toggle" type="button" aria-expanded="false" aria-controls="tag-menu">
+        <span id="tag-summary">All tags</span>
+      </button>
+      <div id="tag-menu" class="tag-menu" hidden aria-labelledby="tag-filter-label">
+        {% assign all_tags = "" | split: "" %}
+        {% for recipe in site.recipes %}
+          {% assign all_tags = all_tags | concat: recipe.tags %}
+        {% endfor %}
+        {% assign tags = all_tags | uniq | sort %}
+        {% for tag in tags %}
+          <label class="tag-option">
+            <input type="checkbox" value="{{ tag | downcase | escape }}" data-tag-option>
+            <span>{{ tag }}</span>
+          </label>
+        {% endfor %}
+      </div>
+      <div id="selected-tags" class="selected-tags" aria-label="Selected tags"></div>
+    </div>
+
+    <button id="reset-filters" class="reset-filters" type="button">Reset filters</button>
   </section>
 
   <section class="recipe-list" id="recipe-list">
@@ -42,17 +55,26 @@ title: Recipes
 
 <script>
   const search = document.querySelector('#search');
-  const tagFilter = document.querySelector('#tag-filter');
+  const tagToggle = document.querySelector('#tag-toggle');
+  const tagSummary = document.querySelector('#tag-summary');
+  const tagMenu = document.querySelector('#tag-menu');
+  const tagOptions = [...document.querySelectorAll('[data-tag-option]')];
+  const selectedTagsContainer = document.querySelector('#selected-tags');
+  const resetFilters = document.querySelector('#reset-filters');
   const cards = [...document.querySelectorAll('.recipe-card')];
   const noResults = document.querySelector('#no-results');
 
   function selectedTags() {
-    return [...tagFilter.selectedOptions].map((option) => option.value);
+    return tagOptions.filter((option) => option.checked).map((option) => option.value);
+  }
+
+  function tagLabel(value) {
+    return tagOptions.find((option) => option.value === value)?.nextElementSibling.textContent || value;
   }
 
   function setSelectedTags(tags) {
-    for (const option of tagFilter.options) {
-      option.selected = tags.includes(option.value);
+    for (const option of tagOptions) {
+      option.checked = tags.includes(option.value);
     }
   }
 
@@ -63,15 +85,46 @@ title: Recipes
   }
 
   function writeUrlState() {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(window.location.search);
     const query = search.value.trim();
     const tags = selectedTags();
 
-    if (query) params.set('q', query);
-    if (tags.length) params.set('tags', tags.join(','));
+    query ? params.set('q', query) : params.delete('q');
+    tags.length ? params.set('tags', tags.join(',')) : params.delete('tags');
 
     const nextUrl = `${window.location.pathname}${params.toString() ? `?${params}` : ''}`;
     window.history.replaceState(null, '', nextUrl);
+  }
+
+  function renderSelectedTags() {
+    const tags = selectedTags();
+    selectedTagsContainer.replaceChildren();
+    tagSummary.textContent = tags.length ? `${tags.length} selected` : 'All tags';
+
+    for (const tag of tags) {
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = 'tag-pill';
+      pill.textContent = `${tagLabel(tag)} ×`;
+      pill.addEventListener('click', () => {
+        const option = tagOptions.find((candidate) => candidate.value === tag);
+        if (option) option.checked = false;
+        filterRecipes();
+      });
+      selectedTagsContainer.append(pill);
+    }
+  }
+
+  function setTagMenuOpen(open) {
+    tagMenu.hidden = !open;
+    tagToggle.setAttribute('aria-expanded', open);
+  }
+
+  function resetAllFilters() {
+    search.value = '';
+    setSelectedTags([]);
+    setTagMenuOpen(false);
+    filterRecipes();
   }
 
   function filterRecipes() {
@@ -89,13 +142,23 @@ title: Recipes
     }
 
     noResults.hidden = visible !== 0;
+    renderSelectedTags();
     writeUrlState();
   }
 
   readUrlState();
   filterRecipes();
+
   search.addEventListener('input', filterRecipes);
-  tagFilter.addEventListener('change', filterRecipes);
+  tagToggle.addEventListener('click', () => setTagMenuOpen(tagMenu.hidden));
+  tagOptions.forEach((option) => option.addEventListener('change', filterRecipes));
+  resetFilters.addEventListener('click', resetAllFilters);
+  document.addEventListener('click', (event) => {
+    if (!document.querySelector('#tag-filter').contains(event.target)) setTagMenuOpen(false);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setTagMenuOpen(false);
+  });
   window.addEventListener('popstate', () => {
     readUrlState();
     filterRecipes();
