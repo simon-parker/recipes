@@ -69,6 +69,12 @@ label,
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
+@media (max-width: 600px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+}
+
 label {
   display: grid;
   gap: .25rem;
