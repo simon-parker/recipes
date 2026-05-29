@@ -1,0 +1,14 @@
+title: Recipes
+baseurl: /recipes
+url: https://simon-parker.github.io
+collections:
+  recipes:
+    output: true
+    permalink: /:collection/:name/
+defaults:
+  - scope:
+      path: ""
+      type: recipes
+    values:
+      layout: recipe
+markdown: kramdown

@@ -1,0 +1,74 @@
+---
+layout: default
+title: Recipes
+---
+
+<section class="hero">
+  <h1>Recipes</h1>
+  <p>{{ site.recipes | size }} recipe{% if site.recipes.size != 1 %}s{% endif %}</p>
+</section>
+
+<section class="filters" aria-label="Recipe filters">
+  <label>
+    Search
+    <input id="search" type="search" placeholder="Search recipes, ingredients, tags" autocomplete="off">
+  </label>
+
+  <label>
+    Tag
+    <select id="tag-filter">
+      <option value="">All tags</option>
+      {% assign all_tags = "" | split: "" %}
+      {% for recipe in site.recipes %}
+        {% assign all_tags = all_tags | concat: recipe.tags %}
+      {% endfor %}
+      {% assign tags = all_tags | uniq | sort %}
+      {% for tag in tags %}
+        <option value="{{ tag | downcase | escape }}">{{ tag }}</option>
+      {% endfor %}
+    </select>
+  </label>
+</section>
+
+<section class="recipe-list" id="recipe-list">
+  {% assign recipes = site.recipes | sort: "title" %}
+  {% for recipe in recipes %}
+    <article class="recipe-card" data-tags="{{ recipe.tags | join: ' ' | downcase | escape }}" data-search="{{ recipe.title | append: ' ' | append: recipe.tags | append: ' ' | append: recipe.content | strip_html | downcase | escape }}">
+      <h2><a href="{{ recipe.url | relative_url }}">{{ recipe.title }}</a></h2>
+      {% if recipe.description %}<p>{{ recipe.description }}</p>{% endif %}
+      {% if recipe.tags %}
+        <ul class="tags">
+          {% for tag in recipe.tags %}<li>{{ tag }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+    </article>
+  {% endfor %}
+</section>
+
+<p id="no-results" class="no-results" hidden>No matching recipes.</p>
+
+<script>
+  const search = document.querySelector('#search');
+  const tagFilter = document.querySelector('#tag-filter');
+  const cards = [...document.querySelectorAll('.recipe-card')];
+  const noResults = document.querySelector('#no-results');
+
+  function filterRecipes() {
+    const query = search.value.trim().toLowerCase();
+    const tag = tagFilter.value;
+    let visible = 0;
+
+    for (const card of cards) {
+      const matchesSearch = !query || card.dataset.search.includes(query);
+      const matchesTag = !tag || card.dataset.tags.split(' ').includes(tag);
+      const show = matchesSearch && matchesTag;
+      card.hidden = !show;
+      if (show) visible += 1;
+    }
+
+    noResults.hidden = visible !== 0;
+  }
+
+  search.addEventListener('input', filterRecipes);
+  tagFilter.addEventListener('change', filterRecipes);
+</script>
