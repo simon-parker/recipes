@@ -33,9 +33,9 @@ title: Recipes
 <section class="divide-y divide-neutral-200 border-t border-neutral-200" id="recipe-list">
   {% assign recipes = site.recipes | sort: "title" %}
   {% for recipe in recipes %}
-    <article class="recipe-card py-5" data-tags="{{ recipe.tags | join: ' ' | downcase | escape }}" data-search="{{ recipe.title | append: ' ' | append: recipe.tags | append: ' ' | append: recipe.content | strip_html | downcase | escape }}">
-      <h2 class="mb-1 text-2xl font-semibold leading-tight"><a class="text-blue-700 underline hover:text-blue-900" href="{{ recipe.url | relative_url }}">{{ recipe.title }}</a></h2>
-      {% if recipe.description %}<p class="text-neutral-700">{{ recipe.description }}</p>{% endif %}
+    <article class="recipe-card min-w-0 py-5" data-tags="{{ recipe.tags | join: ' ' | downcase | escape }}" data-search="{{ recipe.title | append: ' ' | append: recipe.tags | append: ' ' | append: recipe.content | strip_html | downcase | escape }}">
+      <h2 class="mb-1 break-words text-2xl font-semibold leading-tight"><a class="text-blue-700 underline hover:text-blue-900" href="{{ recipe.url | relative_url }}">{{ recipe.title }}</a></h2>
+      {% if recipe.description %}<p class="break-words text-neutral-700">{{ recipe.description }}</p>{% endif %}
       {% if recipe.tags %}
         <ul class="mt-2 flex flex-wrap gap-x-1 text-sm text-neutral-600">
           {% for tag in recipe.tags %}<li class="after:content-[','] last:after:content-none">{{ tag }}</li>{% endfor %}
