@@ -11,5 +11,40 @@ layout: default
       {% for tag in page.tags %}<li>{{ tag }}</li>{% endfor %}
     </ul>
   {% endif %}
+
+  {% if page.languages.size > 1 %}
+    <div class="language-toggle" aria-label="Language">
+      {% for language in page.languages %}
+        <button type="button" data-language-button="{{ language.code }}">{{ language.label }}</button>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   {{ content }}
 </article>
+
+{% if page.languages.size > 1 %}
+<script>
+  const buttons = [...document.querySelectorAll('[data-language-button]')];
+  const sections = [...document.querySelectorAll('[data-language]')];
+  const defaultLanguage = localStorage.getItem('recipe-language') || buttons[0].dataset.languageButton;
+
+  function setLanguage(language) {
+    for (const section of sections) {
+      section.hidden = section.dataset.language !== language;
+    }
+    for (const button of buttons) {
+      const active = button.dataset.languageButton === language;
+      button.disabled = active;
+      button.setAttribute('aria-pressed', active);
+    }
+    localStorage.setItem('recipe-language', language);
+  }
+
+  for (const button of buttons) {
+    button.addEventListener('click', () => setLanguage(button.dataset.languageButton));
+  }
+
+  setLanguage(defaultLanguage);
+</script>
+{% endif %}
