@@ -11,9 +11,8 @@ title: Recipes
     <label for="search">Search</label>
     <input id="search" type="search" placeholder="Search recipes, ingredients, tags" autocomplete="off">
 
-    <label for="tag-filter">Tag</label>
-    <select id="tag-filter">
-      <option value="">All tags</option>
+    <label for="tag-filter">Tags</label>
+    <select id="tag-filter" multiple size="6">
       {% assign all_tags = "" | split: "" %}
       {% for recipe in site.recipes %}
         {% assign all_tags = all_tags | concat: recipe.tags %}
@@ -28,7 +27,7 @@ title: Recipes
   <section class="recipe-list" id="recipe-list">
     {% assign recipes = site.recipes | sort: "title" %}
     {% for recipe in recipes %}
-      <article class="recipe-card" data-tags="{{ recipe.tags | join: ' ' | downcase | escape }}" data-search="{{ recipe.title | append: ' ' | append: recipe.tags | append: ' ' | append: recipe.content | strip_html | downcase | escape }}">
+      <article class="recipe-card" data-tags="{{ recipe.tags | join: '|' | downcase | escape }}" data-search="{{ recipe.title | append: ' ' | append: recipe.tags | append: ' ' | append: recipe.content | strip_html | downcase | escape }}">
         <h2><a href="{{ recipe.url | relative_url }}">{{ recipe.title }}</a></h2>
         {% if recipe.description %}<p>{{ recipe.description }}</p>{% endif %}
         {% if recipe.tags %}
@@ -47,22 +46,58 @@ title: Recipes
   const cards = [...document.querySelectorAll('.recipe-card')];
   const noResults = document.querySelector('#no-results');
 
+  function selectedTags() {
+    return [...tagFilter.selectedOptions].map((option) => option.value);
+  }
+
+  function setSelectedTags(tags) {
+    for (const option of tagFilter.options) {
+      option.selected = tags.includes(option.value);
+    }
+  }
+
+  function readUrlState() {
+    const params = new URLSearchParams(window.location.search);
+    search.value = params.get('q') || '';
+    setSelectedTags((params.get('tags') || '').split(',').filter(Boolean));
+  }
+
+  function writeUrlState() {
+    const params = new URLSearchParams();
+    const query = search.value.trim();
+    const tags = selectedTags();
+
+    if (query) params.set('q', query);
+    if (tags.length) params.set('tags', tags.join(','));
+
+    const nextUrl = `${window.location.pathname}${params.toString() ? `?${params}` : ''}`;
+    window.history.replaceState(null, '', nextUrl);
+  }
+
   function filterRecipes() {
     const query = search.value.trim().toLowerCase();
-    const tag = tagFilter.value;
+    const tags = selectedTags();
     let visible = 0;
 
     for (const card of cards) {
+      const cardTags = card.dataset.tags.split('|');
       const matchesSearch = !query || card.dataset.search.includes(query);
-      const matchesTag = !tag || card.dataset.tags.split(' ').includes(tag);
-      const show = matchesSearch && matchesTag;
+      const matchesTags = tags.every((tag) => cardTags.includes(tag));
+      const show = matchesSearch && matchesTags;
       card.hidden = !show;
       if (show) visible += 1;
     }
 
     noResults.hidden = visible !== 0;
+    writeUrlState();
   }
 
+  readUrlState();
+  filterRecipes();
   search.addEventListener('input', filterRecipes);
   tagFilter.addEventListener('change', filterRecipes);
+  window.addEventListener('popstate', () => {
+    readUrlState();
+    filterRecipes();
+  });
 </script>
