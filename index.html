@@ -3,20 +3,20 @@ layout: default
 title: Recipes
 ---
 
-<section class="hero">
-  <h1>Recipes</h1>
-  <p>{{ site.recipes | size }} recipe{% if site.recipes.size != 1 %}s{% endif %}</p>
+<section class="mb-8">
+  <h1 class="mb-2 text-3xl font-bold tracking-tight sm:text-4xl">Recipes</h1>
+  <p class="text-neutral-600">{{ site.recipes | size }} recipe{% if site.recipes.size != 1 %}s{% endif %}</p>
 </section>
 
-<section class="filters" aria-label="Recipe filters">
-  <label>
+<section class="mb-8 grid gap-4 sm:grid-cols-2" aria-label="Recipe filters">
+  <label class="block text-sm font-medium text-neutral-700">
     Search
-    <input id="search" type="search" placeholder="Search recipes, ingredients, tags" autocomplete="off">
+    <input class="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-base text-neutral-950 placeholder:text-neutral-500 focus:border-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-700" id="search" type="search" placeholder="Search recipes, ingredients, tags" autocomplete="off">
   </label>
 
-  <label>
+  <label class="block text-sm font-medium text-neutral-700">
     Tag
-    <select id="tag-filter">
+    <select class="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-base text-neutral-950 focus:border-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-700" id="tag-filter">
       <option value="">All tags</option>
       {% assign all_tags = "" | split: "" %}
       {% for recipe in site.recipes %}
@@ -30,22 +30,22 @@ title: Recipes
   </label>
 </section>
 
-<section class="recipe-list" id="recipe-list">
+<section class="divide-y divide-neutral-200 border-t border-neutral-200" id="recipe-list">
   {% assign recipes = site.recipes | sort: "title" %}
   {% for recipe in recipes %}
-    <article class="recipe-card" data-tags="{{ recipe.tags | join: ' ' | downcase | escape }}" data-search="{{ recipe.title | append: ' ' | append: recipe.tags | append: ' ' | append: recipe.content | strip_html | downcase | escape }}">
-      <h2><a href="{{ recipe.url | relative_url }}">{{ recipe.title }}</a></h2>
-      {% if recipe.description %}<p>{{ recipe.description }}</p>{% endif %}
+    <article class="recipe-card py-5" data-tags="{{ recipe.tags | join: ' ' | downcase | escape }}" data-search="{{ recipe.title | append: ' ' | append: recipe.tags | append: ' ' | append: recipe.content | strip_html | downcase | escape }}">
+      <h2 class="mb-1 text-2xl font-semibold leading-tight"><a class="text-blue-700 underline hover:text-blue-900" href="{{ recipe.url | relative_url }}">{{ recipe.title }}</a></h2>
+      {% if recipe.description %}<p class="text-neutral-700">{{ recipe.description }}</p>{% endif %}
       {% if recipe.tags %}
-        <ul class="tags">
-          {% for tag in recipe.tags %}<li>{{ tag }}</li>{% endfor %}
+        <ul class="mt-2 flex flex-wrap gap-x-1 text-sm text-neutral-600">
+          {% for tag in recipe.tags %}<li class="after:content-[','] last:after:content-none">{{ tag }}</li>{% endfor %}
         </ul>
       {% endif %}
     </article>
   {% endfor %}
 </section>
 
-<p id="no-results" class="no-results" hidden>No matching recipes.</p>
+<p id="no-results" class="mt-6 text-neutral-600" hidden>No matching recipes.</p>
 
 <script>
   const search = document.querySelector('#search');

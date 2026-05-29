@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="bg-white text-neutral-950 [color-scheme:light]">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,11 +7,11 @@
   <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
   <link rel="stylesheet" href="{{ '/assets/styles.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 </head>
-<body>
-  <header class="site-header">
-    <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+<body class="min-h-screen bg-white text-neutral-950 antialiased">
+  <header class="border-b border-neutral-200">
+    <a class="mx-auto block max-w-3xl px-4 py-4 font-semibold text-neutral-950 no-underline" href="{{ '/' | relative_url }}">{{ site.title }}</a>
   </header>
-  <main class="container">
+  <main class="mx-auto max-w-3xl px-4 py-8 sm:py-10">
     {{ content }}
   </main>
 </body>
