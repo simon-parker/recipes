@@ -20,3 +20,12 @@ tags:
 ```
 
 The index page lists all recipes and provides search/tag filtering.
+
+## CSS
+
+Styles use Tailwind CSS. After changing templates or classes, run:
+
+```sh
+npm install
+npm run build:css
+```
